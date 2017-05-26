@@ -1,0 +1,14 @@
+{
+  "name": "token-persistence",
+  "version": "1.0.0",
+  "description": "To use the example, run the following commands from the root `cross-storage` directory:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Naveen Malhotra",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^0.9.0"
+  }
+}

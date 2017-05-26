@@ -1,0 +1,89 @@
+<!doctype html>
+
+<head>
+    <title>Cross Storage Hub</title>
+</head>
+
+<body>
+    <script type="text/javascript" src="../lib/client.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var storage = new CrossStorageClient('http://localhost:3000/hub.html');
+        /*
+                storage.onConnect()
+                    .then(function() {
+                        return storage.get('key1', 'key2');
+                    }).then(function(res) {
+                        console.log(res); // ['foo', 'bar']
+                    })['catch'](function(err) {
+                        console.log(err);
+                    });
+        */
+        storage.onConnect()
+            .then(function() {
+                var userName = getUrlParameter("uname");
+                if(userName != undefined) {
+                    return storage.get(userName);
+                }
+                else {
+                    return null;
+                }
+            }).then(function(res) {
+                if(res != null)
+                {
+                    var userName = getUrlParameter("uname");
+                    $("#username").text(userName);
+                    $("#token").text(res);
+
+                    localStorage.setItem("token", res);
+                    storage.del(userName);
+                }
+                else {
+                    getLocalToken();
+                }
+
+            })['catch'](function(err) {
+                console.log(err);
+            });
+
+        var getLocalToken = function()
+        {
+            $("#token").text(localStorage.getItem("token"));
+        }
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            padding: 20px;
+        }
+        .tokenStyle
+        {
+            width: 90%;
+
+        }
+    </style>
+    <section id="resultSection">
+        <span>Username: </span>
+        <span id="username"></span>
+
+        <br/>
+
+        <span>Token: </span>
+        <span class="tokenStyle" id="token"></span>
+    </section </body>
+
+    </html>
